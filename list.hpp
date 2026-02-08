@@ -20,6 +20,7 @@ class List
 {
     private:
         Node<T>* _head;
+        Node<T>* _tail;
     public:
         List() : _head(T());
         List(size_t count);
