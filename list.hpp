@@ -10,9 +10,9 @@ struct Node
     Node<T>* _prev;
     Node<T>* _next;
     
-    Node(T data) : _data(data), _next(nullptr), _prev(nullptr) {}
-    Node(T data, next) : _data(data), _prev(nullptr), _next(next) {}
-    Node(T data, prev, next) : _data(data), _prev(prev), _next(next) {}
+    Node(T data = T()) : _data(data), _next(nullptr), _prev(nullptr) {}
+    Node(Node<T>* next, T data = T())  : _data(data), _prev(nullptr), _next(next) {}
+    Node(Node<T>* prev, Node<T>* next, T data = T()) : _data(data), _prev(prev), _next(next) {}
 };
 
 template <typename T>
@@ -22,17 +22,18 @@ class List
         Node<T>* _head;
         Node<T>* _tail;
     public:
-        List() : _head(T());
-        List(size_t count);
+        List() : _head{nullptr}, _tail{nullptr} {};
         List(size_t count, const T& _data = T());
-        List(const List& oter);
+        List(const List& other);
         List(List&& other);
         List& operator=(const List& other);
         List& operator=(List&& other);
+        ~List();
 
         void assign(size_t count, const T& value);
         void assign(std::initializer_list<T> list);
 
+        void print_list();
 };
 
 #include "list.tpp"
