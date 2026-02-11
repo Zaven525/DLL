@@ -22,6 +22,7 @@ class List
         Node<T>* _head;
         Node<T>* _tail;
     public:
+        // Member functions
         List() : _head{nullptr}, _tail{nullptr} {};
         List(size_t count, const T& _data = T());
         List(const List& other);
@@ -29,10 +30,23 @@ class List
         List& operator=(const List& other);
         List& operator=(List&& other);
         ~List();
-
         void assign(size_t count, const T& value);
-        void assign(std::initializer_list<T> list);
 
+        // Element access
+        T& front() { if (_head) return _head->_data; }
+        const T& front() const { if (_head) return _head->_data; }
+        T& back() { if (_tail) return _tail->_data; }
+        const T& back() const { if (_tail) return _tail->_data; }
+        
+        // Capacity
+        bool empty() const noexcept { return !_head; }
+        size_t size() const noexcept;
+        
+        // Modifiers
+        void clear();
+        void insert(size_t pos, const T& value);
+        void insert(size_t pos, T&& value);
+        void insert(size_t pos, size_t count, const T& value );
         void print_list();
 };
 
