@@ -252,13 +252,39 @@ void List<T>::insert(size_t pos, T&& value)
     if (n->_next == nullptr) _tail = n;
 }
 
-template<typename T>
+template <typename T>
 void List<T>::insert(size_t pos, size_t count, const T& value)
 {
     for (size_t i{0}; i < count; ++i)
     {
         insert(i+pos, value);
     }
+}
+
+template <typename T>
+void List<T>::erase(size_t pos)
+{
+    if (!_head || pos >= size()) return;
+    if (pos == 0)
+    {
+        Node<T>* tmp = _head;
+        _head = _head->_next;
+        if (_head) _head->_prev = nullptr;
+        else _tail = nullptr;
+
+        delete tmp;
+        return;
+    }
+
+    Node<T>* cur = _head;
+    for (size_t i{1}; i < pos; ++i)
+    {
+        cur = cur->_next;
+    }
+    cur->_prev->_next = cur->_next;
+    if (cur->_next) cur->_next->_prev = cur->_prev;
+    else _tail = cur->_prev;
+    delete cur; 
 }
 
 template <typename T>
