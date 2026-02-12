@@ -288,6 +288,20 @@ void List<T>::erase(size_t pos)
 }
 
 template <typename T>
+void List<T>::erase(size_t from, size_t to)
+{
+    if (from >= size() || from >= to) return;
+    if (to > size()) to = size();
+
+    for (size_t i{from}; i < to; ++i)
+    {
+        erase(from);
+    }
+}
+
+
+
+template <typename T>
 void List<T>::print_list()
 {
     Node<T>* cur = _head;

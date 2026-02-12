@@ -47,10 +47,13 @@ class List
         void insert(size_t pos, const T& value);
         void insert(size_t pos, T&& value);
         void insert(size_t pos, size_t count, const T& value );
-        
         void erase(size_t pos);
         void erase(size_t from, size_t to);
+
         void print_list();
 };
 
 #include "list.tpp"
+
+
+
