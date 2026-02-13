@@ -13,6 +13,9 @@ struct Node
     Node(T data = T()) : _data(data), _next(nullptr), _prev(nullptr) {}
     Node(Node<T>* next, T data = T())  : _data(data), _prev(nullptr), _next(next) {}
     Node(Node<T>* prev, Node<T>* next, T data = T()) : _data(data), _prev(prev), _next(next) {}
+    Node(const Node& other) : _data{oter._data}, _prev{nullptr}, _next{nullptr} {}
+    Node(Node&& other) noexcept : _data(std::move(other._data)), _prev(nullptr), _next(nullptr) {}
+    ~Node() = default;
 };
 
 template <typename T>
@@ -49,11 +52,25 @@ class List
         void insert(size_t pos, size_t count, const T& value );
         void erase(size_t pos);
         void erase(size_t from, size_t to);
+        void push_back(const T& data);
+        void push_back(T&& data);
+        void pop_back();
+        void push_front(const T& data);
+        void push_front(T&& data);
+        void pop_front();
+        void swap(List<T>& other);
 
+        // Operations
+        void sort();
+        void merge(List<T>& other);
+        void reverse();
         void print_list();
+        
 };
 
 #include "list.tpp"
+
+
 
 
 

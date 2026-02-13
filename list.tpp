@@ -299,7 +299,150 @@ void List<T>::erase(size_t from, size_t to)
     }
 }
 
+template <typename T>
+void List<T>::push_back(const T& data)
+{
+    if (!_tail)
+    {
+        _tail = new Node{data};
+        _head = _tail;
+        return;
+    }
+    _tail->_next = new Node{data};
+    _tail->_next->_prev = _tail;
+    _tail = _tail->_next;
+    _tail->_next = nullptr; 
+}
 
+template <typename T>
+void List<T>::push_back(T&& data)
+{
+    if (!_tail)
+    {
+        _tail = new Node{std::move(data)};
+        _head = _tail;
+        return;
+    }
+    _tail->_next = new Node{std::move(data)};
+    _tail->_next->_prev = _tail;
+    _tail = _tail->_next;
+    _tail->_next = nullptr; 
+}
+
+template <typename T>
+void List<T>::pop_back()
+{
+    if (!_tail) return; 
+    Node<T>* tmp = _tail;
+    _tail = _tail->_prev;
+    delete tmp;
+    if (_tail) _tail->_next = nullptr;
+    else _head = nullptr;
+}
+
+template <typename T>
+void List<T>::push_front(const T& data)
+{
+    if (!_head)
+    {
+        _head = new Node<T>{data};
+        _tail = _head;
+        return;
+    }
+    _head->_prev = new Node<T>{data};
+    _head->_prev->_next = _head;
+    _head = _head->_prev;
+    _head->_prev = nullptr;
+}
+
+template <typename T>
+void List<T>::push_front(T&& data)
+{
+    if (!_head)
+    {
+        _head = new Node<T>{std::move(data)};
+        _tail = _head;
+        return;
+    }
+    _head->_prev = new Node<T>{std::move(data)};
+    _head->_prev->_next = _head;
+    _head = _head->_prev;
+    _head->_prev = nullptr;
+}
+
+template <typename T>
+void List<T>::pop_front()
+{
+    if (!_head) return; 
+    Node<T>* tmp = _head;
+    _head = _head->_next;
+    delete tmp;
+    if (_head) _head->_prev = nullptr;
+    else _tail = nullptr;
+}
+
+template <typename T>
+void List<T>::swap(List<T>& other)
+{
+    std::swap(_head, other._head);
+    std::swap(_tail, other._tail);
+}
+
+// Operations
+template <typename T>
+void List<T>::sort()
+{
+    if (!_head) return;
+    size_t n = size();
+    Node<T>* cur = _head;
+    Node<T>* cmp = _head;
+    while(cur->next)
+    {
+        cmp = _head;
+        while (cmp->next)
+        {
+            if(cmp->_data > cmp->next->_data)
+            {
+                std::swap(cmp->_data, cmp->_next->_data);
+            }
+            cmp = cmp->next;
+        }
+        cur = cur->_next;
+    }
+}
+
+template <typename T>
+void List<T>::merge(List<T>& other)
+{
+    if (this = &other) return;
+    if (!other._head) return;
+    if (!_head)
+    {
+        _head = other._head;
+        _tail = other._tail;
+        other._head = other._tail = nullptr;
+        return;
+    }
+    _tail->_next = other._head;
+    other._head->_prev = _tail;
+    _tail = other._tail;
+
+    other._head = other._tail = nullptr;
+}
+
+template <typename T>
+void List<T>::reverse()
+{
+    size_t n = size()/2;
+    Node<T>* start = _head;
+    Node<T>* end = _tail;
+    for (size_t i{0}; i < n; ++i)
+    {
+        std::swap(start->_data, end->_data);
+        start = start->_next;
+        end = end->_prev; 
+    }
+}
 
 template <typename T>
 void List<T>::print_list()
