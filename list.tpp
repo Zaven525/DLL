@@ -388,6 +388,36 @@ void List<T>::swap(List<T>& other)
     std::swap(_tail, other._tail);
 }
 
+template <typename T>
+template <typename...Args>
+void List<T>::emplace(size_t pos, Args&&...args)
+{
+    if (pos > size()) return;
+    if (pos == 0) 
+    {
+        Node<T>* n = new Node<T>{forward<Args>(args...)};
+        n->_next = _head;
+        n->_prev = nullptr;
+        if(_head) _head->_prev = n;
+        _head = n;
+        if (!_tail) _tail = _head;
+        return;
+    }
+    
+    Node<T>* cur = _head;
+    for (size_t i{0}; i < pos - 1; i++)
+    {
+        cur = cur->_next;
+    } 
+
+    Node<T>* n = new Node<T>{forward<Args>(args...)};
+    if (cur->_next) cur->_next->_prev = n;
+    n->_next = cur->_next;
+    n->_prev = cur;
+    cur->_next = n;
+    if (n->_next == nullptr) _tail = n;
+}
+
 // Operations
 template <typename T>
 void List<T>::sort()
@@ -414,7 +444,7 @@ void List<T>::sort()
 template <typename T>
 void List<T>::merge(List<T>& other)
 {
-    if (this = &other) return;
+    if (this == &other) return;
     if (!other._head) return;
     if (!_head)
     {

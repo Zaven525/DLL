@@ -1,7 +1,18 @@
 #pragma once
 #include <iostream>
 #include <initializer_list>
+#include <type_traits>
 
+template <typename T>
+T&& forward(std::remove_reference_t<T>& arg)
+{
+  return static_cast<T&&> (arg);
+}
+template <typename T>
+T&& forward(std::remove_reference_t<T>&& arg)
+{
+  return static_cast<T&&> (arg);
+}
 
 template <typename T>
 struct Node
@@ -13,7 +24,7 @@ struct Node
     Node(T data = T()) : _data(data), _next(nullptr), _prev(nullptr) {}
     Node(Node<T>* next, T data = T())  : _data(data), _prev(nullptr), _next(next) {}
     Node(Node<T>* prev, Node<T>* next, T data = T()) : _data(data), _prev(prev), _next(next) {}
-    Node(const Node& other) : _data{oter._data}, _prev{nullptr}, _next{nullptr} {}
+    Node(const Node& other) : _data{other._data}, _prev{nullptr}, _next{nullptr} {}
     Node(Node&& other) noexcept : _data(std::move(other._data)), _prev(nullptr), _next(nullptr) {}
     ~Node() = default;
 };
@@ -59,6 +70,9 @@ class List
         void push_front(T&& data);
         void pop_front();
         void swap(List<T>& other);
+
+        template<typename ... Args>
+        void emplace(size_t pos, Args&&...args);
 
         // Operations
         void sort();
